@@ -32,22 +32,19 @@ impl Solution for Day1 {
 
             let (direction, distance) = line.split_at(1);
             let distance = distance.parse::<i16>().unwrap() % 100;
+
             match direction {
                 "L" => {
-                    println!("[BEFORE] L {} {}", distance, curr_idx);
                     curr_idx -= distance;
                     if curr_idx < 0 {
                         curr_idx += 100;
                     }
-                    println!("[AFTER]  L {} {}\n", distance, curr_idx);
                 }
                 "R" => {
-                    println!("[BEFORE] R {} {}", distance, curr_idx);
                     curr_idx += distance;
                     if curr_idx > 99 {
                         curr_idx -= 100;
                     }
-                    println!("[AFTER]  R {} {}\n", distance, curr_idx);
                 }
                 _ => panic!("boom"),
             }
