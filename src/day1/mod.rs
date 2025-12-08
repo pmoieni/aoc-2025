@@ -31,20 +31,14 @@ impl Solution for Day1 {
             let line = line.expect("no line");
 
             let (direction, distance) = line.split_at(1);
-            let distance = distance.parse::<i16>().unwrap() % 100;
+            let distance = distance.parse::<i16>().unwrap();
 
             match direction {
                 "L" => {
-                    curr_idx -= distance;
-                    if curr_idx < 0 {
-                        curr_idx += 100;
-                    }
+                    curr_idx = (curr_idx - distance).rem_euclid(100);
                 }
                 "R" => {
-                    curr_idx += distance;
-                    if curr_idx > 99 {
-                        curr_idx -= 100;
-                    }
+                    curr_idx = (curr_idx + distance).rem_euclid(100);
                 }
                 _ => panic!("boom"),
             }
@@ -58,6 +52,49 @@ impl Solution for Day1 {
     }
 
     fn result_p2(&self) -> String {
-        "".into()
+        let file = fs::File::open("src/day1/input.txt").expect("failed to read input file");
+
+        let reader = BufReader::new(file);
+
+        let mut curr_idx = 50;
+        let mut result = 0;
+
+        for line in reader.lines() {
+            let line = line.expect("no line");
+
+            let (direction, distance) = line.split_at(1);
+
+            let distance = distance.parse::<i16>().unwrap();
+            let rotations = (distance / 100).abs();
+            let distance = distance % 100;
+
+            println!("rotations: {}", rotations);
+
+            match direction {
+                "L" => {
+                    curr_idx -= distance;
+                    if curr_idx < 0 {
+                        println!("{}", curr_idx);
+                        result += 1;
+                        curr_idx += 100;
+                    }
+                }
+                "R" => {
+                    curr_idx += distance;
+                    if curr_idx > 99 {
+                        println!("{}", curr_idx);
+                        result += 1;
+                        curr_idx -= 100;
+                    }
+                }
+                _ => panic!("boom"),
+            }
+
+            if curr_idx == 0 {
+                result += 1;
+            }
+        }
+
+        result.to_string()
     }
 }
